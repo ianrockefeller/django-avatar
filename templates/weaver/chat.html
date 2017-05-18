@@ -1,0 +1,31 @@
+{% extends "weaver/base.html" %}
+{% block title %}Echo - Chat Room{% endblock %}
+{% block content %}
+<h3>Chat room</h3>
+<p><b>Session Key:</b> {{request.session.session_key}}</p>
+<div id="chat"></div>
+<input type="text" id="message" />
+<button id="send" onclick="sendMessage()">Send</button>
+<script>
+// Note that the path doesn't matter right now; any WebSocket
+// connection gets bumped over to WebSocket consumers
+socket = new WebSocket("ws://" + window.location.host + "/{{chat_id}}");
+socket.onmessage = function(e) {
+	document.getElementById('chat').innerHTML += '<p>' + e.data + '</p>';
+} 
+
+socket.onopen = function() {
+    socket.send("{{user}} has joined the room.");
+}
+
+// Call onopen directly if socket is already open
+if (socket.readyState == WebSocket.OPEN) socket.onopen();
+
+function sendMessage() {
+	var text = document.getElementById('message').value;
+	document.getElementById('message').value = '';
+	socket.send(text);
+}
+</script>
+{% endblock %}
+

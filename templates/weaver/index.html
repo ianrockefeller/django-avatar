@@ -1,0 +1,12 @@
+{% extends "weaver/base.html" %}
+
+{% block content %}
+<h3>Weaver Index Page</h3>
+<p>Hello, World!</p>
+{{user}}
+<p><u>Chats:</u></p>
+{% for chat in chats %}
+<p><a href="./chat/{{chat}}">{{chat}}</a></p>
+{% endfor %}
+<p><a href="./channel">Channels</a></p>
+{% endblock %}
